@@ -1,0 +1,6 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://myproject.csv7s1ashn2n.us-east-2.rds.amazonaws.com/project
+    username: admin
+    password: Yyao!2010
