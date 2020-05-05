@@ -9,14 +9,23 @@ public class Home {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private int homeId;
+
     private Date purchaseDate;
+
     private Date purchaseValue;
+
     private double area;
+
     private char type;
+
     private int autoFireNotification;
+
     private int homeSecuritySystem;
+
     private char swimmingPool;
+
     private int basement;
+
     private int hiId;
 
     public int getHomeId() {

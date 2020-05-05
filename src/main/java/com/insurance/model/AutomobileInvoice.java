@@ -16,9 +16,7 @@ public class AutomobileInvoice {
 
     private double invoiceAmount;
 
-    @ManyToOne
-    @JoinColumn(name = "aiId")
-    private AutomobileInsuranceCustomer automobileInsuranceCustomer;
+    private int aiId;
 
     public int getInvoiceId() {
         return invoiceId;
@@ -52,12 +50,12 @@ public class AutomobileInvoice {
         this.invoiceAmount = invoiceAmount;
     }
 
-    public AutomobileInsuranceCustomer getAutomobileInsuranceCustomer() {
-        return automobileInsuranceCustomer;
+    public int getAiId() {
+        return aiId;
     }
 
-    public void setAutomobileInsuranceCustomer(AutomobileInsuranceCustomer automobileInsuranceCustomer) {
-        this.automobileInsuranceCustomer = automobileInsuranceCustomer;
+    public void setAiId(int aiId) {
+        this.aiId = aiId;
     }
 
     @Override
@@ -67,7 +65,7 @@ public class AutomobileInvoice {
                 ", date=" + date +
                 ", paymentDueDate=" + paymentDueDate +
                 ", invoiceAmount=" + invoiceAmount +
-                ", automobileInsuranceCustomer=" + automobileInsuranceCustomer +
+                ", aiId=" + aiId +
                 '}';
     }
 }

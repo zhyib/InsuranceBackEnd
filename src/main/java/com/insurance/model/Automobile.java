@@ -8,12 +8,14 @@ public class Automobile {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private int automobileId;
+
     private String vin;
+
     private int makeModelYear;
+
     private char status;
 
-    @ManyToOne
-    private AutomobileInsuranceCustomer aiId;
+    private int aiId;
 
     public int getAutomobileId() {
         return automobileId;
@@ -47,11 +49,11 @@ public class Automobile {
         this.status = status;
     }
 
-    public AutomobileInsuranceCustomer getAiId() {
+    public int getAiId() {
         return aiId;
     }
 
-    public void setAiId(AutomobileInsuranceCustomer aiId) {
+    public void setAiId(int aiId) {
         this.aiId = aiId;
     }
 

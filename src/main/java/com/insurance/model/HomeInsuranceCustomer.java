@@ -1,8 +1,6 @@
 package com.insurance.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
@@ -10,10 +8,15 @@ import java.util.Date;
 public class HomeInsuranceCustomer {
     @Id
     private int customerId;
+
     private int hiId;
+
     private Date startDate;
+
     private Date endDate;
+
     double premiumAmount;
+
     private char status;
 
     public int getCustomerId() {

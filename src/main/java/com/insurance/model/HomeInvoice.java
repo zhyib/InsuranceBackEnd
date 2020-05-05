@@ -9,9 +9,13 @@ public class HomeInvoice {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private int invoiceId;
+
     private Date date;
+
     private Date paymentDueDate;
+
     private double invoiceAmount;
+
     private int hiId;
 
     public int getInvoiceId() {

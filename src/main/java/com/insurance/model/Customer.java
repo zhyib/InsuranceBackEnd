@@ -8,14 +8,23 @@ public class Customer {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private int customerId;
+
     private String lastName;
+
     private String firstName;
+
     private String address;
+
     private String state;
+
     private String city;
+
     private String zipcode;
+
     private char gender;
+
     private char martial;
+
     private char customerType;
 
     public int getCustomerId() {

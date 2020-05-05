@@ -9,11 +9,18 @@ public class Driver {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private int driverId;
+
     private String licenseNo;
+
     private String lastName;
+
     private String firstName;
+
     private Date birthdate;
-    private int automobileId;
+
+    @ManyToOne
+    @JoinColumn(name = "automobile_id")
+    private Automobile automobile;
 
     public int getDriverId() {
         return driverId;
@@ -55,12 +62,12 @@ public class Driver {
         this.birthdate = birthdate;
     }
 
-    public int getAutomobileId() {
-        return automobileId;
+    public Automobile getAutomobile() {
+        return automobile;
     }
 
-    public void setAutomobileId(int automobileId) {
-        this.automobileId = automobileId;
+    public void setAutomobile(Automobile automobile) {
+        this.automobile = automobile;
     }
 
     @Override
@@ -71,7 +78,7 @@ public class Driver {
                 ", lastName='" + lastName + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", birthdate=" + birthdate +
-                ", automobileId=" + automobileId +
+                ", automobile=" + automobile +
                 '}';
     }
 }
