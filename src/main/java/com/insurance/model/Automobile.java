@@ -1,18 +1,19 @@
 package com.insurance.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "automobile")
 public class Automobile {
     @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private int automobileId;
     private String vin;
     private int makeModelYear;
     private char status;
-    private int automobileInsuranceCustomerAiId;
+
+    @ManyToOne
+    private AutomobileInsuranceCustomer aiId;
 
     public int getAutomobileId() {
         return automobileId;
@@ -46,12 +47,12 @@ public class Automobile {
         this.status = status;
     }
 
-    public int getAutomobileInsuranceCustomerAiId() {
-        return automobileInsuranceCustomerAiId;
+    public AutomobileInsuranceCustomer getAiId() {
+        return aiId;
     }
 
-    public void setAutomobileInsuranceCustomerAiId(int automobileInsuranceCustomerAiId) {
-        this.automobileInsuranceCustomerAiId = automobileInsuranceCustomerAiId;
+    public void setAiId(AutomobileInsuranceCustomer aiId) {
+        this.aiId = aiId;
     }
 
     @Override
@@ -61,7 +62,7 @@ public class Automobile {
                 ", vin='" + vin + '\'' +
                 ", makeModelYear=" + makeModelYear +
                 ", status=" + status +
-                ", automobileInsuranceCustomerAiId=" + automobileInsuranceCustomerAiId +
+                ", aiId=" + aiId +
                 '}';
     }
 }

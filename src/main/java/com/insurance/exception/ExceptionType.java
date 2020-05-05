@@ -2,7 +2,7 @@ package com.insurance.exception;
 
 public enum ExceptionType
 {
-	DONE(0,"成功"),
+	DONE(0,"Success"),
 
 	ROOM_FIND_BY_ROOMNO_ERROR(100,"未找到该房间号对应的房间信息"),
 
