@@ -11,9 +11,7 @@ public class HomePayment {
 
     private String paymentType;
 
-    @ManyToOne
-    @JoinColumn(name = "invoice_id")
-    private HomeInvoice homeInvoice;
+    private int invoiceId;
 
     public int getPaymentId() {
         return paymentId;
@@ -31,12 +29,12 @@ public class HomePayment {
         this.paymentType = paymentType;
     }
 
-    public HomeInvoice getHomeInvoice() {
-        return homeInvoice;
+    public int getInvoiceId() {
+        return invoiceId;
     }
 
-    public void setHomeInvoice(HomeInvoice homeInvoice) {
-        this.homeInvoice = homeInvoice;
+    public void setInvoiceId(int invoiceId) {
+        this.invoiceId = invoiceId;
     }
 
     @Override
@@ -44,7 +42,7 @@ public class HomePayment {
         return "HomePayment{" +
                 "paymentId=" + paymentId +
                 ", paymentType='" + paymentType + '\'' +
-                ", homeInvoice=" + homeInvoice +
+                ", invoiceId=" + invoiceId +
                 '}';
     }
 }

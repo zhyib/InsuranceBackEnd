@@ -18,9 +18,7 @@ public class Driver {
 
     private Date birthdate;
 
-    @ManyToOne
-    @JoinColumn(name = "automobile_id")
-    private Automobile automobile;
+    private int automobileId;
 
     public int getDriverId() {
         return driverId;
@@ -62,12 +60,12 @@ public class Driver {
         this.birthdate = birthdate;
     }
 
-    public Automobile getAutomobile() {
-        return automobile;
+    public int getAutomobileId() {
+        return automobileId;
     }
 
-    public void setAutomobile(Automobile automobile) {
-        this.automobile = automobile;
+    public void setAutomobileId(int automobileId) {
+        this.automobileId = automobileId;
     }
 
     @Override
@@ -78,7 +76,7 @@ public class Driver {
                 ", lastName='" + lastName + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", birthdate=" + birthdate +
-                ", automobile=" + automobile +
+                ", automobileId=" + automobileId +
                 '}';
     }
 }

@@ -11,9 +11,7 @@ public class AutomobilePayment {
 
     private String paymentType;
 
-    @ManyToOne
-    @JoinColumn(name = "invoice_id")
-    private AutomobileInvoice automobileInvoice;
+    private int invoiceId;
 
     public int getPaymentId() {
         return paymentId;
@@ -31,12 +29,12 @@ public class AutomobilePayment {
         this.paymentType = paymentType;
     }
 
-    public AutomobileInvoice getAutomobileInvoice() {
-        return automobileInvoice;
+    public int getInvoiceId() {
+        return invoiceId;
     }
 
-    public void setAutomobileInvoice(AutomobileInvoice automobileInvoice) {
-        this.automobileInvoice = automobileInvoice;
+    public void setInvoiceId(int invoiceId) {
+        this.invoiceId = invoiceId;
     }
 
     @Override
@@ -44,7 +42,7 @@ public class AutomobilePayment {
         return "AutomobilePayment{" +
                 "paymentId=" + paymentId +
                 ", paymentType='" + paymentType + '\'' +
-                ", automobileInvoice=" + automobileInvoice +
+                ", invoiceId=" + invoiceId +
                 '}';
     }
 }
