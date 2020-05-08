@@ -31,6 +31,11 @@ public class HomePaymentService {
         }
     }
 
+    public HomePayment findByHomePaymentId(int homePaymentId) {
+        return homePaymentRepository.findById(homePaymentId).orElse(null);
+
+    }
+
     public void delete(HomePayment r) {
         homePaymentRepository.delete(r);
     }
