@@ -1,5 +1,6 @@
 package com.insurance.controller;
 
+import com.insurance.model.Customer;
 import com.insurance.model.HomePayment;
 import com.insurance.model.Result;
 import com.insurance.service.HomePaymentService;
@@ -47,6 +48,15 @@ public class HomePaymentController {
             return ResultReturn.success(homePaymentService.save(e));
         }
 
+    }
+
+    @RequestMapping("/homePayment/delete/{paymentId}")
+    public Result homePaymentDelete(@PathVariable("paymentId") int paymentId) {
+        HomePayment e = homePaymentService.findByHomePaymentId(paymentId);
+        if (e==null)
+            return ResultReturn.error(1,"can't find this paymentId");
+        homePaymentService.delete(e);
+        return ResultReturn.success(e);
     }
 
     public HomePayment saveHomePayment(int paymentId, String paymentType, int invoiceId) {

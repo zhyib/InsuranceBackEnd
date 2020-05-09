@@ -56,6 +56,17 @@ public class CustomerController {
 
     }
 
+    @RequestMapping("/customer/delete/{customerId}")
+    public Result customerDelete(@PathVariable("customerId") int customerId) {
+        Customer e = customerService.findByCustomerId(customerId);
+        if (e==null)
+            return ResultReturn.error(1,"can't find this customerId");
+        customerService.delete(e);
+        return ResultReturn.success(e);
+    }
+
+
+
     public Customer saveCustomer(int customerId, String lastName, String firstName, String address, String state,
                                  String city, String zipcode, char gender, char martial, char customerType) {
         Customer e = new Customer();
@@ -71,5 +82,9 @@ public class CustomerController {
         e.setCustomerType(customerType);
         return e;
     }
+
+
+
+
 }
 
