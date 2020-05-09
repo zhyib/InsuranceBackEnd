@@ -3,6 +3,7 @@ package com.insurance.service;
 import com.insurance.exception.ExceptionType;
 import com.insurance.exception.InsuranceException;
 import com.insurance.model.AutomobilePayment;
+import com.insurance.model.HomePayment;
 import com.insurance.repository.AutomobilePaymentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,10 @@ public class AutomobilePaymentService {
             throw new InsuranceException(ExceptionType.ROOM_FIND_BY_ROOMNO_ERROR.getCode(),
                     ExceptionType.ROOM_FIND_BY_ROOMNO_ERROR.getMsg());
         }
+    }
+    public AutomobilePayment findByAutomobilePaymentId(int automobilePaymentId) {
+        return automobilePaymentRepository.findById(automobilePaymentId).orElse(null);
+
     }
 
     public void delete(AutomobilePayment r) {

@@ -7,7 +7,7 @@ import java.util.Date;
 @Table(name = "driver")
 public class Driver {
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    //@GeneratedValue(strategy= GenerationType.IDENTITY)
     private int driverId;
 
     private String licenseNo;

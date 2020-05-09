@@ -7,7 +7,7 @@ import java.util.Date;
 @Table(name = "home_invoice")
 public class HomeInvoice {
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    //@GeneratedValue(strategy= GenerationType.IDENTITY)
     private int invoiceId;
 
     private Date date;

@@ -7,7 +7,7 @@ import java.util.Date;
 @Table(name = "automobile_invoice")
 public class AutomobileInvoice {
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    //@GeneratedValue(strategy= GenerationType.IDENTITY)
     private int invoiceId;
 
     private Date date;

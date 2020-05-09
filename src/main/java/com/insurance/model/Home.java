@@ -7,7 +7,7 @@ import java.util.Date;
 @Table(name = "home")
 public class Home {
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    //@GeneratedValue(strategy= GenerationType.IDENTITY)
     private int homeId;
 
     private Date purchaseDate;
