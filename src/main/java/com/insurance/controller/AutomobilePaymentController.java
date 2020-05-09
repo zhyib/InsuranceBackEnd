@@ -23,7 +23,7 @@ public class AutomobilePaymentController {
     public Result<AutomobilePayment> getAll() { return ResultReturn.success(automobilePaymentService.getAll()); }
 
     @RequestMapping("/automobilePayment/add")
-    public Result AutomobilePaymentAdd(@RequestParam("paymentId") int paymentId, @RequestParam("paymentType") String paymentType,
+    public Result automobilePaymentAdd(@RequestParam("paymentId") int paymentId, @RequestParam("paymentType") String paymentType,
                                  @RequestParam("invoiceId") int invoiceId) {
         AutomobilePayment e = automobilePaymentService.findByAutomobilePaymentId(paymentId);
         if (e != null)
@@ -35,7 +35,7 @@ public class AutomobilePaymentController {
     }
 
     @RequestMapping("/AutomobilePayment/update/{paymentId}")
-    public Result employUpdate(@PathVariable("paymentId") int paymentId, @RequestParam("paymentType") String paymentType,
+    public Result automobilePaymentUpdate(@PathVariable("paymentId") int paymentId, @RequestParam("paymentType") String paymentType,
                                @RequestParam("invoiceId") int invoiceId) {
         AutomobilePayment e = automobilePaymentService.findByAutomobilePaymentId(paymentId);
         if (e == null) {

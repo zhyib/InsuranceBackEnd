@@ -2,6 +2,7 @@ package com.insurance.service;
 
 import com.insurance.exception.ExceptionType;
 import com.insurance.exception.InsuranceException;
+import com.insurance.model.Automobile;
 import com.insurance.model.Home;
 import com.insurance.repository.HomeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,11 @@ public class HomeService {
             throw new InsuranceException(ExceptionType.ROOM_FIND_BY_ROOMNO_ERROR.getCode(),
                     ExceptionType.ROOM_FIND_BY_ROOMNO_ERROR.getMsg());
         }
+    }
+
+    public Home findByHomeId(int homeId) {
+        return homeRepository.findById(homeId).orElse(null);
+
     }
 
     public void delete(Home r) {

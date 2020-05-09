@@ -37,7 +37,7 @@ public class HomePaymentController {
     }
 
     @RequestMapping("/homePayment/update/{paymentId}")
-    public Result employUpdate(@PathVariable("paymentId") int paymentId, @RequestParam("paymentType") String paymentType,
+    public Result homePaymentUpdate(@PathVariable("paymentId") int paymentId, @RequestParam("paymentType") String paymentType,
                                @RequestParam("invoiceId") int invoiceId) {
         HomePayment e = homePaymentService.findByHomePaymentId(paymentId);
         if (e == null) {

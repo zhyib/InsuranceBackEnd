@@ -3,6 +3,7 @@ package com.insurance.service;
 import com.insurance.exception.ExceptionType;
 import com.insurance.exception.InsuranceException;
 import com.insurance.model.HomeInvoice;
+import com.insurance.model.HomeInvoice;
 import com.insurance.repository.HomeInvoiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,11 @@ public class HomeInvoiceService {
             throw new InsuranceException(ExceptionType.ROOM_FIND_BY_ROOMNO_ERROR.getCode(),
                     ExceptionType.ROOM_FIND_BY_ROOMNO_ERROR.getMsg());
         }
+    }
+
+    public HomeInvoice findByHomeInvoiceId(int homeInvoiceId) {
+        return homeInvoiceRepository.findById(homeInvoiceId).orElse(null);
+
     }
 
     public void delete(HomeInvoice r) {

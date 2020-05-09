@@ -3,6 +3,7 @@ package com.insurance.service;
 import com.insurance.exception.ExceptionType;
 import com.insurance.exception.InsuranceException;
 import com.insurance.model.Driver;
+import com.insurance.model.Home;
 import com.insurance.repository.DriverRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,11 @@ public class DriverService {
             throw new InsuranceException(ExceptionType.ROOM_FIND_BY_ROOMNO_ERROR.getCode(),
                     ExceptionType.ROOM_FIND_BY_ROOMNO_ERROR.getMsg());
         }
+    }
+
+    public Driver findByDriverId(int driverId) {
+        return driverRepository.findById(driverId).orElse(null);
+
     }
 
     public void delete(Driver r) {

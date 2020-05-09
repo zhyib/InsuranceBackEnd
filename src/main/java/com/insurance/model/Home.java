@@ -12,7 +12,7 @@ public class Home {
 
     private Date purchaseDate;
 
-    private Date purchaseValue;
+    private double purchaseValue;
 
     private double area;
 
@@ -44,11 +44,11 @@ public class Home {
         this.purchaseDate = purchaseDate;
     }
 
-    public Date getPurchaseValue() {
+    public double getPurchaseValue() {
         return purchaseValue;
     }
 
-    public void setPurchaseValue(Date purchaseValue) {
+    public void setPurchaseValue(double purchaseValue) {
         this.purchaseValue = purchaseValue;
     }
 
