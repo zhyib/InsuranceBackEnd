@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @RestController
@@ -28,26 +30,41 @@ public class HomeInvoiceController {
 
     @RequestMapping("/homeInvoice/add")
     public Result homeInvoiceAdd(@RequestParam("invoiceId") int invoiceId,
-                                       @RequestParam("date") Date date, @RequestParam("paymentDueDate") Date paymentDueDate, @RequestParam("invoiceAmount") double invoiceAmount,
-                                       @RequestParam("hiId") int hiId) {
+                                       @RequestParam("date") String date, @RequestParam("paymentDueDate") String paymentDueDate, @RequestParam("invoiceAmount") double invoiceAmount,
+                                       @RequestParam("hiId") int hiId) throws InterruptedException {
         HomeInvoice e = homeInvoiceService.findByHomeInvoiceId(invoiceId);
         if (e != null)
             return ResultReturn.error(2, "that home Invoice already exist");
         else {
-            e = saveHomeInvoice(invoiceId, date, paymentDueDate, invoiceAmount, hiId);
+            try {
+                SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+                Date sd = formatter.parse(date);
+                Date ed = formatter.parse(paymentDueDate);
+                e = saveHomeInvoice(invoiceId, sd, ed, invoiceAmount, hiId);
+            } catch (ParseException excpt) {
+                excpt.printStackTrace();
+            }
+
             return ResultReturn.success(homeInvoiceService.save(e));
         }
     }
 
     @RequestMapping("/homeInvoice/update/{invoiceId}")
     public Result homeInvoiceUpdate(@PathVariable("invoiceId") int invoiceId,
-                                          @RequestParam("date") Date date, @RequestParam("paymentDueDate") Date paymentDueDate, @RequestParam("invoiceAmount") double invoiceAmount,
-                                          @RequestParam("hiId") int hiId) {
+                                          @RequestParam("date") String date, @RequestParam("paymentDueDate") String paymentDueDate, @RequestParam("invoiceAmount") double invoiceAmount,
+                                          @RequestParam("hiId") int hiId) throws InterruptedException {
         HomeInvoice e = homeInvoiceService.findByHomeInvoiceId(invoiceId);
         if (e == null) {
             return ResultReturn.error(1, "that invoiceId did not exist");
         } else {
-            e = saveHomeInvoice(invoiceId, date, paymentDueDate, invoiceAmount, hiId);
+            try {
+                SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+                Date sd = formatter.parse(date);
+                Date ed = formatter.parse(paymentDueDate);
+                e = saveHomeInvoice(invoiceId, sd, ed, invoiceAmount, hiId);
+            } catch (ParseException excpt) {
+                excpt.printStackTrace();
+            }
             return ResultReturn.success(homeInvoiceService.save(e));
         }
 

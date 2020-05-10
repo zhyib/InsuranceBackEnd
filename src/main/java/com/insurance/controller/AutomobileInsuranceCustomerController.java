@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @RestController
@@ -28,26 +31,41 @@ public class AutomobileInsuranceCustomerController {
 
     @RequestMapping("/aiCustomer/add")
     public Result automobileInsuranceCustomerAdd(@RequestParam("customerId") int customerId, @RequestParam("aiId") int aiId,
-                                       @RequestParam("startDate") Date startDate, @RequestParam("endDate") Date endDate, @RequestParam("premiumAmount") double premiumAmount,
-                                                 @RequestParam("status") char status) {
+                                       @RequestParam("startDate") String startDate, @RequestParam("endDate") String endDate, @RequestParam("premiumAmount") double premiumAmount,
+                                                 @RequestParam("status") char status) throws InterruptedException {
         AutomobileInsuranceCustomer e = automobileService.findByAutomobileInsuranceCustomerId(customerId);
         if (e != null)
             return ResultReturn.error(2, "that Automobile Insurance Customer already exist");
         else {
-            e = saveAutomobileInsuranceCustomer(customerId, aiId, startDate, endDate, premiumAmount, status);
+            try {
+                SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+                Date sd = formatter.parse(startDate);
+                Date ed = formatter.parse(endDate);
+                e = saveAutomobileInsuranceCustomer(customerId, aiId, sd, ed, premiumAmount, status);
+            } catch (ParseException excpt) {
+                excpt.printStackTrace();
+            }
+
             return ResultReturn.success(automobileService.save(e));
         }
     }
 
     @RequestMapping("/aiCustomer/update/{customerId}")
     public Result automobileInsuranceCustomerUpdate(@PathVariable("customerId") int customerId, @RequestParam("aiId") int aiId,
-                         @RequestParam("startDate") Date startDate, @RequestParam("endDate") Date endDate, @RequestParam("premiumAmount") double premiumAmount,
-                         @RequestParam("status") char status) {
+                         @RequestParam("startDate") String startDate, @RequestParam("endDate") String endDate, @RequestParam("premiumAmount") double premiumAmount,
+                         @RequestParam("status") char status) throws InterruptedException {
         AutomobileInsuranceCustomer e = automobileService.findByAutomobileInsuranceCustomerId(customerId);
         if (e == null) {
             return ResultReturn.error(1, "that customerId did not exist");
         } else {
-            e = saveAutomobileInsuranceCustomer(customerId, aiId, startDate, endDate, premiumAmount, status);
+            try {
+                SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+                Date sd = formatter.parse(startDate);
+                Date ed = formatter.parse(endDate);
+                e = saveAutomobileInsuranceCustomer(customerId, aiId, sd, ed, premiumAmount, status);
+            } catch (ParseException excpt) {
+                excpt.printStackTrace();
+            }
             return ResultReturn.success(automobileService.save(e));
         }
 

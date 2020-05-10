@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @RestController
@@ -29,26 +31,41 @@ public class HomeInsuranceCustomerController {
 
     @RequestMapping("/hiCustomer/add")
     public Result homeInsuranceCustomerAdd(@RequestParam("customerId") int customerId, @RequestParam("hiId") int aiId,
-                                                 @RequestParam("startDate") Date startDate, @RequestParam("endDate") Date endDate, @RequestParam("premiumAmount") double premiumAmount,
+                                                 @RequestParam("startDate") String startDate, @RequestParam("endDate") String endDate, @RequestParam("premiumAmount") double premiumAmount,
                                                  @RequestParam("status") char status) {
         HomeInsuranceCustomer e = homeInsuranceCustomerService.findByHomeInsuranceCustomerId(customerId);
         if (e != null)
             return ResultReturn.error(2, "that Home Insurance Customer already exist");
         else {
-            e = saveHomeInsuranceCustomer(customerId, aiId, startDate, endDate, premiumAmount, status);
+
+            try {
+                SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+                Date sd = formatter.parse(startDate);
+                Date ed = formatter.parse(endDate);
+                e = saveHomeInsuranceCustomer(customerId, aiId, sd, ed, premiumAmount, status);
+            } catch (ParseException excpt) {
+                excpt.printStackTrace();
+            }
             return ResultReturn.success(homeInsuranceCustomerService.save(e));
         }
     }
 
     @RequestMapping("/hiCustomer/update/{customerId}")
     public Result homeInsuranceCustomerUpdate(@PathVariable("customerId") int customerId, @RequestParam("hiId") int aiId,
-                                                    @RequestParam("startDate") Date startDate, @RequestParam("endDate") Date endDate, @RequestParam("premiumAmount") double premiumAmount,
+                                                    @RequestParam("startDate") String startDate, @RequestParam("endDate") String endDate, @RequestParam("premiumAmount") double premiumAmount,
                                                     @RequestParam("status") char status) {
         HomeInsuranceCustomer e = homeInsuranceCustomerService.findByHomeInsuranceCustomerId(customerId);
         if (e == null) {
             return ResultReturn.error(1, "that customerId did not exist");
         } else {
-            e = saveHomeInsuranceCustomer(customerId, aiId, startDate, endDate, premiumAmount, status);
+            try {
+                SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+                Date sd = formatter.parse(startDate);
+                Date ed = formatter.parse(endDate);
+                e = saveHomeInsuranceCustomer(customerId, aiId, sd, ed, premiumAmount, status);
+            } catch (ParseException excpt) {
+                excpt.printStackTrace();
+            }
             return ResultReturn.success(homeInsuranceCustomerService.save(e));
         }
 

@@ -11,7 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.ParseException;
 import java.util.Date;
+import java.text.SimpleDateFormat;
+
 
 @RestController
 public class DriverController {
@@ -30,12 +33,20 @@ public class DriverController {
     @RequestMapping("/driver/add")
     public Result driverAdd(@RequestParam("driverId") int driverId,
                             @RequestParam("licenseNo") String licenseNo, @RequestParam("lastName") String lastName, @RequestParam("firstName") String firstName,
-                            @RequestParam("birthdate") Date birthdate, @RequestParam("automobileId") int automobileId) {
+                            @RequestParam("birthdate") String birthdate, @RequestParam("automobileId") int automobileId) throws InterruptedException{
         Driver e = driverService.findByDriverId(driverId);
         if (e != null)
             return ResultReturn.error(2, "that Home already exist");
         else {
-            e = saveDriver(driverId, licenseNo, lastName, firstName, birthdate, automobileId);
+            try {
+                SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+                Date bd = formatter.parse(birthdate);
+                e = saveDriver(driverId, licenseNo, lastName, firstName, bd, automobileId);
+            } catch (ParseException excpt) {
+                 excpt.printStackTrace();
+            }
+
+
             return ResultReturn.success(driverService.save(e));
         }
     }
@@ -43,12 +54,18 @@ public class DriverController {
     @RequestMapping("/driver/update/{driverId}")
     public Result driverUpdate(@PathVariable("driverId") int driverId,
                              @RequestParam("licenseNo") String licenseNo, @RequestParam("lastName") String lastName, @RequestParam("firstName") String firstName,
-                             @RequestParam("birthdate") Date birthdate, @RequestParam("automobileId") int automobileId) {
+                             @RequestParam("birthdate") String birthdate, @RequestParam("automobileId") int automobileId) throws InterruptedException {
         Driver e = driverService.findByDriverId(driverId);
         if (e == null) {
             return ResultReturn.error(1, "that driverId did not exist");
         } else {
-            e = saveDriver(driverId, licenseNo, lastName, firstName, birthdate, automobileId);
+            try {
+                SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+                Date bd = formatter.parse(birthdate);
+                e = saveDriver(driverId, licenseNo, lastName, firstName, bd, automobileId);
+            } catch (ParseException excpt) {
+                excpt.printStackTrace();
+            }
             return ResultReturn.success(driverService.save(e));
         }
 

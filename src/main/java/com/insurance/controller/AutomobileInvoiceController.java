@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @RestController
@@ -30,26 +32,42 @@ public class AutomobileInvoiceController {
 
     @RequestMapping("/automobileInvoice/add")
     public Result automobileInvoiceAdd(@RequestParam("invoiceId") int invoiceId,
-                                           @RequestParam("date") Date date, @RequestParam("paymentDueDate") Date paymentDueDate, @RequestParam("invoiceAmount") double invoiceAmount,
-                                           @RequestParam("aiId") int aiId) {
+                                           @RequestParam("date") String date, @RequestParam("paymentDueDate") String paymentDueDate, @RequestParam("invoiceAmount") double invoiceAmount,
+                                           @RequestParam("aiId") int aiId) throws InterruptedException {
         AutomobileInvoice e = automobileInvoiceService.findByAutomobileInvoiceId(invoiceId);
         if (e != null)
             return ResultReturn.error(2, "that Automobile Invoice already exist");
         else {
-            e = saveAutomobileInvoice(invoiceId, date, paymentDueDate, invoiceAmount, aiId);
+
+            try {
+                SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+                Date sd = formatter.parse(date);
+                Date ed = formatter.parse(paymentDueDate);
+                e = saveAutomobileInvoice(invoiceId, sd, ed, invoiceAmount, aiId);
+            } catch (ParseException excpt) {
+                excpt.printStackTrace();
+            }
+
             return ResultReturn.success(automobileInvoiceService.save(e));
         }
     }
 
     @RequestMapping("/automobileInvoice/update/{invoiceId}")
     public Result automobileInvoiceUpdate(@PathVariable("invoiceId") int invoiceId,
-                                          @RequestParam("date") Date date, @RequestParam("paymentDueDate") Date paymentDueDate, @RequestParam("invoiceAmount") double invoiceAmount,
-                                          @RequestParam("aiId") int aiId) {
+                                          @RequestParam("date") String date, @RequestParam("paymentDueDate") String paymentDueDate, @RequestParam("invoiceAmount") double invoiceAmount,
+                                          @RequestParam("aiId") int aiId) throws InterruptedException {
         AutomobileInvoice e = automobileInvoiceService.findByAutomobileInvoiceId(invoiceId);
         if (e == null) {
             return ResultReturn.error(1, "that invoiceId did not exist");
         } else {
-            e = saveAutomobileInvoice(invoiceId, date, paymentDueDate, invoiceAmount, aiId);
+            try {
+                SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+                Date sd = formatter.parse(date);
+                Date ed = formatter.parse(paymentDueDate);
+                e = saveAutomobileInvoice(invoiceId, sd, ed, invoiceAmount, aiId);
+            } catch (ParseException excpt) {
+                excpt.printStackTrace();
+            }
             return ResultReturn.success(automobileInvoiceService.save(e));
         }
 
