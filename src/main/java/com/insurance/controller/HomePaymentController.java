@@ -1,8 +1,8 @@
 package com.insurance.controller;
 
-import com.insurance.model.Customer;
-import com.insurance.model.HomePayment;
-import com.insurance.model.Result;
+import com.insurance.model.*;
+import com.insurance.service.HomeInsuranceCustomerService;
+import com.insurance.service.HomeInvoiceService;
 import com.insurance.service.HomePaymentService;
 import com.insurance.util.ResultReturn;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,13 +11,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+
 @RestController
 public class HomePaymentController {
     private final HomePaymentService homePaymentService;
+    private final HomeInsuranceCustomerService homeInsuranceCustomerService;
+    private final HomeInvoiceService homeInvoiceService;
 
     @Autowired
-    public HomePaymentController(HomePaymentService homePaymentService) {
+    public HomePaymentController(HomePaymentService homePaymentService, HomeInsuranceCustomerService homeInsuranceCustomerService, HomeInvoiceService homeInvoiceService) {
         this.homePaymentService = homePaymentService;
+        this.homeInsuranceCustomerService = homeInsuranceCustomerService;
+        this.homeInvoiceService = homeInvoiceService;
     }
 
     @RequestMapping("/homePayment/getAll")
@@ -57,6 +63,44 @@ public class HomePaymentController {
             return ResultReturn.error(1,"can't find this paymentId");
         homePaymentService.delete(e);
         return ResultReturn.success(e);
+    }
+
+    @RequestMapping("/homePayment/search/{customerId}")
+    public Result homePaymentSearch(@PathVariable("customerId") int customerId) {
+        Iterable<HomeInsuranceCustomer> e = homeInsuranceCustomerService.getAll();
+        ArrayList<Integer> myList = new ArrayList<Integer>();
+        for (HomeInsuranceCustomer f: e) {
+            if (f.getCustomerId()==customerId) {
+                myList.add(f.getHiId());
+            }
+        }
+
+        if (myList.isEmpty()) {
+            return ResultReturn.error(1, "that customer did not have home insurance");
+        } else {
+            Iterable<HomeInvoice> k = homeInvoiceService.getAll();
+            ArrayList<Integer> homeInvoiceList = new ArrayList<Integer>();
+            for (HomeInvoice p: k) {
+                if (myList.contains(p.getHiId())) {
+                    homeInvoiceList.add(p.getInvoiceId());
+                }
+            }
+            if (homeInvoiceList.isEmpty()) {
+                return ResultReturn.error(1, "that customer did not have home insurance invoice");
+            } else {
+                Iterable<HomePayment> homePayment = homePaymentService.getAll();
+                ArrayList<HomePayment> paymentList = new ArrayList<HomePayment>();
+                for (HomePayment o: homePayment) {
+                    if (homeInvoiceList.contains(o.getInvoiceId())) {
+                        paymentList.add(o);
+                    }
+                }
+                if (paymentList.isEmpty()) {
+                    return ResultReturn.error(1, "that customer did not have home insurance payment");
+                } else
+                    return ResultReturn.success(paymentList);
+            }
+        }
     }
 
     public HomePayment saveHomePayment(int paymentId, String paymentType, int invoiceId) {

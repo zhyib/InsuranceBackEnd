@@ -2,6 +2,7 @@ package com.insurance.controller;
 
 import com.insurance.model.AutomobileInsuranceCustomer;
 import com.insurance.model.AutomobilePayment;
+import com.insurance.model.Customer;
 import com.insurance.model.Result;
 import com.insurance.service.AutomobileInsuranceCustomerService;
 import com.insurance.util.ResultReturn;
@@ -69,6 +70,17 @@ public class AutomobileInsuranceCustomerController {
             return ResultReturn.success(automobileService.save(e));
         }
 
+    }
+
+    @RequestMapping("/aiCustomer/search/{customerId}")
+    public Result automobileInsuranceCustomerSearch(@PathVariable("customerId") int customerId) {
+        Iterable<AutomobileInsuranceCustomer> e = automobileService.getAll();
+        for (AutomobileInsuranceCustomer f: e) {
+            if (f.getCustomerId() == customerId) {
+                return ResultReturn.success(f);
+            }
+        }
+        return ResultReturn.error(1,"can't find this customerId");
     }
 
     public AutomobileInsuranceCustomer saveAutomobileInsuranceCustomer(int customerId, int aiId, Date startDate, Date endDate, double premiumAmount, char status) {

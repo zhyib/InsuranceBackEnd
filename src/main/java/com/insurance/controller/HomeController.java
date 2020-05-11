@@ -1,8 +1,7 @@
 package com.insurance.controller;
 
-import com.insurance.model.Automobile;
-import com.insurance.model.Home;
-import com.insurance.model.Result;
+import com.insurance.model.*;
+import com.insurance.service.HomeInsuranceCustomerService;
 import com.insurance.service.HomeService;
 import com.insurance.util.ResultReturn;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,15 +12,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 @RestController
 public class HomeController {
     private final HomeService homeService;
+    private final HomeInsuranceCustomerService homeInsuranceCustomerService;
 
     @Autowired
-    public HomeController(HomeService homeService) {
+    public HomeController(HomeService homeService, HomeInsuranceCustomerService homeInsuranceCustomerService) {
         this.homeService = homeService;
+        this.homeInsuranceCustomerService = homeInsuranceCustomerService;
     }
 
     @RequestMapping("/home/getAll")
@@ -71,6 +73,29 @@ public class HomeController {
             return ResultReturn.success(homeService.save(e));
         }
 
+    }
+
+    @RequestMapping("home/search/{customerId}")
+    public Result<Home> homeSearch(@PathVariable("customerId") int customerId) {
+        Iterable<HomeInsuranceCustomer> e = homeInsuranceCustomerService.getAll();
+        ArrayList<Integer> myList = new ArrayList<Integer>();
+        for (HomeInsuranceCustomer f: e) {
+            if (f.getCustomerId()==customerId) {
+                myList.add(f.getHiId());
+            }
+        }
+        if (myList.isEmpty()) {
+            return ResultReturn.error(1, "that customerId did not have home insurance");
+        } else {
+            Iterable<Home> k = homeService.getAll();
+            ArrayList<Home> homeList = new ArrayList<Home>();
+            for (Home p: k) {
+                if (myList.contains(p.getHiId())) {
+                    homeList.add(p);
+                }
+            }
+            return ResultReturn.success(homeList);
+        }
     }
 
     public Home saveHome(int homeId, Date purchaseDate, double purchaseValue, double area, char type,

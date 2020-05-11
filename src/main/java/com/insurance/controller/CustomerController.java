@@ -65,6 +65,15 @@ public class CustomerController {
         return ResultReturn.success(e);
     }
 
+    @RequestMapping("/customer/search/{customerId}")
+    public Result customerSearch(@PathVariable("customerId") int customerId) {
+        Customer e = customerService.findByCustomerId(customerId);
+        if (e==null)
+            return ResultReturn.error(1,"can't find this customerId");
+        else
+            return ResultReturn.success(e);
+    }
+
 
 
     public Customer saveCustomer(int customerId, String lastName, String firstName, String address, String state,

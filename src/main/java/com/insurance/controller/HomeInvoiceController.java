@@ -1,7 +1,11 @@
 package com.insurance.controller;
 
+import com.insurance.model.HomeInsuranceCustomer;
+//import com.insurance.model.homeInsuranceCustomer;
+//import com.insurance.model.homeInvoice;
 import com.insurance.model.HomeInvoice;
 import com.insurance.model.Result;
+import com.insurance.service.HomeInsuranceCustomerService;
 import com.insurance.service.HomeInvoiceService;
 import com.insurance.util.ResultReturn;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,15 +16,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 @RestController
 public class HomeInvoiceController {
     private final HomeInvoiceService homeInvoiceService;
+    private final HomeInsuranceCustomerService homeInsuranceCustomerService;
 
     @Autowired
-    public HomeInvoiceController(HomeInvoiceService homeInvoiceService) {
+    public HomeInvoiceController(HomeInvoiceService homeInvoiceService, HomeInsuranceCustomerService homeInsuranceCustomerService) {
         this.homeInvoiceService = homeInvoiceService;
+        this.homeInsuranceCustomerService = homeInsuranceCustomerService;
     }
 
     @RequestMapping("/homeInvoice/getAll")
@@ -68,6 +75,29 @@ public class HomeInvoiceController {
             return ResultReturn.success(homeInvoiceService.save(e));
         }
 
+    }
+
+    @RequestMapping("/homeInvoice/search/{customerId}")
+    public Result homeInvoiceSearch(@PathVariable("customerId") int customerId) {
+        Iterable<HomeInsuranceCustomer> e = homeInsuranceCustomerService.getAll();
+        ArrayList<Integer> myList = new ArrayList<Integer>();
+        for (HomeInsuranceCustomer f: e) {
+            if (f.getCustomerId()==customerId) {
+                myList.add(f.getHiId());
+            }
+        }
+        if (myList.isEmpty()) {
+            return ResultReturn.error(1, "that customerId did not have home insurance");
+        } else {
+            Iterable<HomeInvoice> k = homeInvoiceService.getAll();
+            ArrayList<HomeInvoice> homeInvoiceList = new ArrayList<HomeInvoice>();
+            for (HomeInvoice p: k) {
+                if (myList.contains(p.getHiId())) {
+                    homeInvoiceList.add(p);
+                }
+            }
+            return ResultReturn.success(homeInvoiceList);
+        }
     }
 
     public HomeInvoice saveHomeInvoice(int invoiceId, Date date, Date paymentDueDate, double invoiceAmount, int hiId) {

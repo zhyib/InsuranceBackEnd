@@ -1,5 +1,6 @@
 package com.insurance.controller;
 
+import com.insurance.model.AutomobileInsuranceCustomer;
 import com.insurance.model.HomeInsuranceCustomer;
 import com.insurance.model.HomeInsuranceCustomer;
 import com.insurance.model.Result;
@@ -69,6 +70,17 @@ public class HomeInsuranceCustomerController {
             return ResultReturn.success(homeInsuranceCustomerService.save(e));
         }
 
+    }
+
+    @RequestMapping("/hiCustomer/search/{customerId}")
+    public Result homeInsuranceCustomerSearch(@PathVariable("customerId") int customerId) {
+        Iterable<HomeInsuranceCustomer> e = homeInsuranceCustomerService.getAll();
+        for (HomeInsuranceCustomer f: e) {
+            if (f.getCustomerId() == customerId) {
+                return ResultReturn.success(f);
+            }
+        }
+        return ResultReturn.error(1,"can't find this customerId");
     }
 
     public HomeInsuranceCustomer saveHomeInsuranceCustomer(int customerId, int hiId, Date startDate, Date endDate, double premiumAmount, char status) {

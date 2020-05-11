@@ -1,8 +1,11 @@
 package com.insurance.controller;
 
+import com.insurance.model.Automobile;
+import com.insurance.model.AutomobileInsuranceCustomer;
 import com.insurance.model.Driver;
-import com.insurance.model.Home;
 import com.insurance.model.Result;
+import com.insurance.service.AutomobileInsuranceCustomerService;
+import com.insurance.service.AutomobileService;
 import com.insurance.service.DriverService;
 import com.insurance.util.ResultReturn;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 
@@ -19,10 +23,15 @@ import java.text.SimpleDateFormat;
 @RestController
 public class DriverController {
     private final DriverService driverService;
+    private final AutomobileService automobileService;
+    private final AutomobileInsuranceCustomerService automobileInsuranceCustomerService;
+
 
     @Autowired
-    public DriverController(DriverService driverService) {
+    public DriverController(DriverService driverService, AutomobileService automobileService, AutomobileInsuranceCustomerService automobileInsuranceCustomerService) {
         this.driverService = driverService;
+        this.automobileService = automobileService;
+        this.automobileInsuranceCustomerService = automobileInsuranceCustomerService;
     }
 
     @RequestMapping("/driver/getAll")
@@ -68,6 +77,45 @@ public class DriverController {
             }
             return ResultReturn.success(driverService.save(e));
         }
+
+    }
+
+    @RequestMapping("driver/search/{customerId}")
+    public Result<Driver> driverSearch(@PathVariable("customerId") int customerId) {
+        Iterable<AutomobileInsuranceCustomer> q = automobileInsuranceCustomerService.getAll();
+        ArrayList<Integer> aiCustomerList = new ArrayList<Integer>();
+        for (AutomobileInsuranceCustomer f: q) {
+            if (f.getCustomerId()==customerId) {
+                aiCustomerList.add(f.getAiId());
+            }
+        }
+        if (aiCustomerList.isEmpty()) {
+            return ResultReturn.error(1, "that customerId did not exist");
+        } else {
+            Iterable<Automobile> e = automobileService.getAll();
+            ArrayList<Integer> automobileList = new ArrayList<Integer>();
+            for (Automobile f: e){
+                if (aiCustomerList.contains(f.getAiId())) {
+                    automobileList.add(f.getAutomobileId());
+                }
+            }
+            if (automobileList.isEmpty()) {
+                return ResultReturn.error(1, "that customer did not have an automobile");
+            } else
+            {
+                Iterable<Driver> g = driverService.getAll();
+                ArrayList<Driver> driverList = new ArrayList<Driver>();
+                for (Driver k: g) {
+                    if (automobileList.contains(k.getAutomobileId())) {
+                        driverList.add(k);
+                    }
+                }
+                return ResultReturn.success(driverList);
+            }
+        }
+
+
+
 
     }
 
