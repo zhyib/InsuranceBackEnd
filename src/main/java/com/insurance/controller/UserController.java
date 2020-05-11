@@ -41,36 +41,38 @@ public class UserController {
 
     @RequestMapping("/user/add")
     public Result userAdd(@RequestParam("userId") int userId,
-                          @RequestParam("purchaseDate") Date purchaseDate, @RequestParam("purchaseValue") double purchaseValue, @RequestParam("area") double area,
-                          @RequestParam("type") char type, @RequestParam("autoFireNotification") int autoFireNotification, @RequestParam("userSecuritySystem") int userSecuritySystem,
-                          @RequestParam("swimmingPool") char swimmingPool,
-                          @RequestParam("basement") int basement, @RequestParam("hiId") int hiId) {
+                          @RequestParam("username") String username, @RequestParam("userPwd") String userPwd, @RequestParam("userRole") int userRole,
+                          @RequestParam("customerId") int customerId) {
         User e = userService.findByUserId(userId);
         if (e != null)
             return ResultReturn.error(2, "that User already exist");
         else {
-            e = saveUser();
+            e = saveUser(userId, username, userPwd, userRole, customerId);
             return ResultReturn.success(userService.save(e));
         }
     }
 
     @RequestMapping("/user/update/{userId}")
     public Result userUpdate(@PathVariable("userId") int userId,
-                             @RequestParam("purchaseDate") Date purchaseDate, @RequestParam("purchaseValue") double purchaseValue, @RequestParam("area") double area,
-                             @RequestParam("type") char type, @RequestParam("autoFireNotification") int autoFireNotification, @RequestParam("userSecuritySystem") int userSecuritySystem,
-                             @RequestParam("swimmingPool") char swimmingPool,
-                             @RequestParam("basement") int basement, @RequestParam("hiId") int hiId) {
+                             @RequestParam("username") String username, @RequestParam("userPwd") String userPwd, @RequestParam("userRole") int userRole,
+                             @RequestParam("customerId") int customerId) {
         User e = userService.findByUserId(userId);
         if (e == null) {
             return ResultReturn.error(1, "that userId did not exist");
         } else {
-            e = saveUser();
+            e = saveUser(userId, username, userPwd, userRole, customerId);
             return ResultReturn.success(userService.save(e));
         }
 
     }
 
-    public User saveUser() {
-        return new User();
+    public User saveUser(int userId, String username, String userPwd, int userRole, int customerId) {
+        User e = new User();
+        e.setCustomerId(customerId);
+        e.setUserId(userId);
+        e.setUsername(username);
+        e.setUserPwd(userPwd);
+        e.setUserRole(userRole);
+        return e;
     }
 }
