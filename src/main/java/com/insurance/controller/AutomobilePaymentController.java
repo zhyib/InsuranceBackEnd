@@ -41,7 +41,7 @@ public class AutomobilePaymentController {
         }
     }
 
-    @RequestMapping("/AutomobilePayment/update/{paymentId}")
+    @RequestMapping("/automobilePayment/update/{paymentId}")
     public Result automobilePaymentUpdate(@PathVariable("paymentId") int paymentId, @RequestParam("paymentType") String paymentType,
                                @RequestParam("invoiceId") int invoiceId) {
         AutomobilePayment e = automobilePaymentService.findByAutomobilePaymentId(paymentId);
@@ -52,6 +52,15 @@ public class AutomobilePaymentController {
             return ResultReturn.success(automobilePaymentService.save(e));
         }
 
+    }
+
+    @RequestMapping("/automobilePayment/delete/{paymentId}")
+    public Result automobilePaymentDelete(@PathVariable("paymentId") int paymentId) {
+        AutomobilePayment e = automobilePaymentService.findByAutomobilePaymentId(paymentId);
+        if (e==null)
+            return ResultReturn.error(1,"can't find this paymentId");
+        automobilePaymentService.delete(e);
+        return ResultReturn.success(e);
     }
 
     @RequestMapping("/automobilePayment/search/{customerId}")

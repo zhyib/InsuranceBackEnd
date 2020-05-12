@@ -1,9 +1,6 @@
 package com.insurance.controller;
 
-import com.insurance.model.Automobile;
-import com.insurance.model.AutomobileInsuranceCustomer;
-import com.insurance.model.Driver;
-import com.insurance.model.Result;
+import com.insurance.model.*;
 import com.insurance.service.AutomobileInsuranceCustomerService;
 import com.insurance.service.AutomobileService;
 import com.insurance.service.DriverService;
@@ -78,6 +75,15 @@ public class DriverController {
             return ResultReturn.success(driverService.save(e));
         }
 
+    }
+
+    @RequestMapping("/driver/delete/{driverId}")
+    public Result driverDelete(@PathVariable("driverId") int driverId) {
+        Driver e = driverService.findByDriverId(driverId);
+        if (e==null)
+            return ResultReturn.error(1,"can't find this driverId");
+        driverService.delete(e);
+        return ResultReturn.success(e);
     }
 
     @RequestMapping("driver/search/{customerId}")
