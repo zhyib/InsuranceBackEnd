@@ -52,6 +52,16 @@ public class UserController {
         }
     }
 
+    @RequestMapping("/user/search/{userId}")
+    public Result userSearch(@PathVariable("userId") int userId) {
+        User e = userService.findByUserId(userId);
+        if (e == null) {
+            return ResultReturn.error(1, "that userId did not exist");
+        } else {
+            return ResultReturn.success(e);
+        }
+    }
+
     @RequestMapping("/user/update/{userId}")
     public Result userUpdate(@PathVariable("userId") int userId,
                              @RequestParam("username") String username, @RequestParam("userPwd") String userPwd, @RequestParam("userRole") int userRole,
